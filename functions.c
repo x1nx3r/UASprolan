@@ -94,6 +94,6 @@ int binarySearch(const struct Pasien people[], int size, const char key[]) {
     return -1;  // Element not found
 }
 
-int main(){
-    return 0;
+void hello(){
+    printf("Hello World");
 }
