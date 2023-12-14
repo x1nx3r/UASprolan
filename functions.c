@@ -1,6 +1,7 @@
-#include<stdio.h>
-#include<string.h>
+#include <stdio.h>
+#include <string.h>
 
+// Struktur untuk merepresentasikan data seorang pasien
 struct Pasien {
     char nama[50];
     char umur[4];
@@ -8,18 +9,22 @@ struct Pasien {
     char tingkatPenyakit[24];
 };
 
+// Fungsi untuk membandingkan dua pasien berdasarkan nama
 int compareByNama(const struct Pasien *a, const struct Pasien *b) {
     return strcmp(a->nama, b->nama);
 }
 
+// Fungsi untuk membandingkan dua pasien berdasarkan umur
 int compareByUmur(const struct Pasien *a, const struct Pasien *b) {
     return strcmp(a->umur, b->umur);
 }
 
+// Fungsi untuk membandingkan dua pasien berdasarkan jenis penyakit
 int compareByJenisPenyakit(const struct Pasien *a, const struct Pasien *b) {
     return strcmp(a->tingkatPenyakit, b->tingkatPenyakit);
 }
 
+// Fungsi untuk melakukan pengurutan (selection sort) pada array pasien
 void selectionSort(struct Pasien identitas[], int size, int (*compare)(const struct Pasien *, const struct Pasien *)) {
     for (int i = 0; i < size - 1; i++) {
         int minIndex = i;
@@ -29,7 +34,7 @@ void selectionSort(struct Pasien identitas[], int size, int (*compare)(const str
             }
         }
         if (minIndex != i) {
-            // Swap the elements if necessary
+            // Tukar elemen jika diperlukan
             struct Pasien temp = identitas[i];
             identitas[i] = identitas[minIndex];
             identitas[minIndex] = temp;
@@ -37,7 +42,7 @@ void selectionSort(struct Pasien identitas[], int size, int (*compare)(const str
     }
 }
 
-// Function to append an array of Person structs to a file
+// Fungsi untuk menambahkan array pasien ke dalam file
 void appendPeopleToFile(const char *filename, struct Pasien *people, int count) {
     FILE *filePointer = fopen(filename, "a");
 
@@ -53,7 +58,7 @@ void appendPeopleToFile(const char *filename, struct Pasien *people, int count) 
     fclose(filePointer);
 }
 
-// Function to read an array of Person structs from a file
+// Fungsi untuk membaca array pasien dari file
 void readPeopleFromFile(const char *filename, struct Pasien *people, int count) {
     FILE *filePointer = fopen(filename, "r");
 
@@ -71,13 +76,14 @@ void readPeopleFromFile(const char *filename, struct Pasien *people, int count) 
             return;
         }
 
-        // Consume the newline character
+        // Konsumsi karakter newline
         fgetc(filePointer);
     }
 
     fclose(filePointer);
 }
 
+// Fungsi untuk melakukan pencarian biner pada array pasien berdasarkan nama
 int binarySearch(const struct Pasien people[], int size, const char key[]) {
     int low = 0;
     int high = size - 1;
@@ -87,13 +93,14 @@ int binarySearch(const struct Pasien people[], int size, const char key[]) {
 
         int cmp = strcmp(people[mid].nama, key);
 
-        if (cmp == 0) return mid;  // Element found
+        if (cmp == 0) return mid;  // Elemen ditemukan
         else if (cmp < 0) low = mid + 1;
         else high = mid - 1;
     }
-    return -1;  // Element not found
+    return -1;  // Elemen tidak ditemukan
 }
 
-void hello(){
+// Fungsi sederhana untuk mencetak "Hello World"
+void hello() {
     printf("Hello World");
 }
