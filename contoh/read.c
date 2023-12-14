@@ -1,59 +1,84 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 
-struct Person {
-    char name[50];
-    int age;
+struct Pasien {
+    char nama[50];
+    char umur[4];
+    char jenisKelamin[24];
+    char tingkatPenyakit[24];
 };
 
-int main() {
-    // Create an array of structs
-    struct Person people[3];
+void readPeopleFromFile(const char *filename, struct Pasien **people, int *count) {
+    FILE *filePointer = fopen(filename, "r");
 
-    // Declare a FILE pointer
-    FILE *filePointer;
-
-    // Open the file for reading
-    filePointer = fopen("people.txt", "r");
-
-    // Check if the file is successfully opened
     if (filePointer == NULL) {
-        perror("Error opening the file");
-        return 1; // Exit with an error code
+        perror("Error opening the file for reading");
+        return;
     }
 
-    // Read each struct from the file
-    for (int i = 0; i < 3; i++) {
-        // Temporary variables to check return value
-        int age;
-        char tempName[50];
+    // Determine the number of lines in the file
+    int numberOfLines = 0;
+    char buffer[1024]; // Adjust the buffer size as needed
 
-        // Check the return value of fscanf
-        if (fscanf(filePointer, "Name: %49[^,], Age: %d", tempName, &age) != 2) {
+    while (fgets(buffer, sizeof(buffer), filePointer) != NULL) {
+        numberOfLines++;
+    }
+
+    // Allocate memory for the array of struct Pasien based on the number of lines
+    *people = (struct Pasien *)malloc(numberOfLines * sizeof(struct Pasien));
+
+    if (*people == NULL) {
+        perror("Error allocating memory");
+        fclose(filePointer);
+        return;
+    }
+
+    // Move the file pointer back to the beginning of the file
+    fseek(filePointer, 0, SEEK_SET);
+
+    // Read the contents of the file into the dynamically allocated array
+    for (int i = 0; i < numberOfLines; i++) {
+        int result = fscanf(filePointer, "Nama: %[^,], Umur: %[^,], Jenis Kelamin: %[^,], Tingkat Penyakit: %s\n",
+                            (*people)[i].nama, (*people)[i].umur, (*people)[i].jenisKelamin, (*people)[i].tingkatPenyakit);
+
+        if (result != 4) {
             perror("Error reading from the file");
             fclose(filePointer);
-            return 1; // Exit with an error code
+            free(*people);
+            *people = NULL; // Set the pointer to NULL to indicate failure
+            return;
         }
 
         // Consume the newline character
         fgetc(filePointer);
-
-        // Copy the temporary variables to the struct
-        strcpy(people[i].name, tempName);
-        people[i].age = age;
     }
 
-    // Close the file
+    // Set the count variable
+    *count = numberOfLines;
+
     fclose(filePointer);
+}
 
-    // Now, 'people' array is populated with data from the file
+int main() {
+    const char *filename = "people.txt";
+    struct Pasien *people;
+    int count;
 
-    // You can use the array as needed
+    readPeopleFromFile(filename, &people, &count);
 
-    // For example, print the data
-    for (int i = 0; i < 3; i++) {
-        printf("%s, %d\n", people[i].name, people[i].age);
+    if (people != NULL) {
+        // Now, 'people' contains the data from the file
+        // 'count' contains the number of lines
+
+        // Example: Print the data
+        for (int i = 0; i < count; i++) {
+            printf("Name: %s, Age: %s, Gender: %s, Disease Level: %s\n",
+                   people[i].nama, people[i].umur, people[i].jenisKelamin, people[i].tingkatPenyakit);
+        }
+
+        // Free the dynamically allocated memory when done
+        free(people);
     }
 
-    return 0; // Exit without an error
+    return 0;
 }

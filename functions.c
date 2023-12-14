@@ -24,6 +24,31 @@ int compareByJenisPenyakit(const struct Pasien *a, const struct Pasien *b) {
     return strcmp(a->tingkatPenyakit, b->tingkatPenyakit);
 }
 
+
+int countLines(const char *filename) {
+    // Open the file for reading
+    FILE *file = fopen(filename, "r");
+
+    // Check if the file is successfully opened
+    if (file == NULL) {
+        perror("Error opening the file");
+        return -1; // Return -1 to indicate an error
+    }
+
+    int lineCount = 0;
+    char buffer[1024]; // Adjust the buffer size as needed
+
+    // Read the file line by line
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        lineCount++;
+    }
+
+    // Close the file
+    fclose(file);
+
+    return lineCount;
+}
+
 // Fungsi untuk melakukan pengurutan (selection sort) pada array pasien
 void selectionSort(struct Pasien identitas[], int size, int (*compare)(const struct Pasien *, const struct Pasien *)) {
     for (int i = 0; i < size - 1; i++) {
@@ -68,16 +93,20 @@ void readPeopleFromFile(const char *filename, struct Pasien *people, int count) 
     }
 
     for (int i = 0; i < count; i++) {
-        int result = fscanf(filePointer, "Nama: %s, Umur: %s, Jenis Kelamin: %s, Tingkat Penyakit: %s\n", people[i].nama, people[i].umur, people[i].jenisKelamin, people[i].tingkatPenyakit);
+        int result = fscanf(filePointer, "Nama: %[^,], Umur: %[^,], Jenis Kelamin: %[^,], Tingkat Penyakit: %s",
+                            people[i].nama, people[i].umur, people[i].jenisKelamin, people[i].tingkatPenyakit);
 
-        if (result != 2) {
+        if (result != 4) {
             perror("Error reading from the file");
             fclose(filePointer);
             return;
         }
 
-        // Konsumsi karakter newline
-        fgetc(filePointer);
+        // Consume the newline character, if any
+        int newline = fgetc(filePointer);
+        if (newline != '\n' && newline != EOF) {
+            ungetc(newline, filePointer); // Put the character back if it's not a newline or EOF
+        }
     }
 
     fclose(filePointer);
@@ -98,6 +127,24 @@ int binarySearch(const struct Pasien people[], int size, const char key[]) {
         else high = mid - 1;
     }
     return -1;  // Elemen tidak ditemukan
+}
+
+void initializePeople(struct Pasien people[], int size) {
+    // Initialize the array with empty values
+    for (int i = 0; i < size; i++) {
+        strcpy(people[i].nama, "");  // Empty string indicates an empty element
+    }
+}
+
+int findEmptyElement(struct Pasien people[], int size) {
+    // Find the first element with an empty nama field
+    for (int i = 0; i < size; i++) {
+        if (strcmp(people[i].nama, "") == 0) {
+            return i;  // Return the index of the empty element
+        }
+    }
+
+    return -1;  // Return -1 if no empty element is found
 }
 
 // Fungsi sederhana untuk mencetak "Hello World"
