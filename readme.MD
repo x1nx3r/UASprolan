@@ -15,7 +15,12 @@ Represents patient data with the following fields:
 int compareByNama(const struct Pasien *a, const struct Pasien *b);
 ```
 
-Compares two patients based on their names.
+Digunakan untuk komparasi berdasarkan nama. Fungsi ini digunakan sebagai argumen terakhir pada fungsi selectionSort dan binarySearch.
+
+- `Pasien *a` : Pointer ke elemen a struct pasien
+- `Pasien *b` : Pointer ke elemen b struct pasien
+
+Fungsi ini melakukan compare dua string dengan strcmp() dan memberikan nilai return integer. jika return positif maka string pertama lebih besar daripada string kedua dan sebaliknya.
 
 ## `compareByUmur`
 
@@ -23,7 +28,12 @@ Compares two patients based on their names.
 int compareByUmur(const struct Pasien *a, const struct Pasien *b);
 ```
 
-Compares two patients based on their ages.
+Digunakan untuk komparasi berdasarkan umur. Fungsi ini digunakan sebagai argumen terakhir pada fungsi selectionSort dan binarySearch.
+
+- `Pasien *a` : Pointer ke elemen a struct pasien
+- `Pasien *b` : Pointer ke elemen b struct pasien
+
+Fungsi ini melakukan compare dua string dengan strcmp() dan memberikan nilai return integer. jika return positif maka string pertama lebih besar daripada string kedua dan sebaliknya.
 
 ## `compareByJenisPenyakit`
 
@@ -31,7 +41,12 @@ Compares two patients based on their ages.
 int compareByJenisPenyakit(const struct Pasien *a, const struct Pasien *b);
 ```
 
-Compares two patients based on the level of their diseases.
+Digunakan untuk komparasi berdasarkan Jenis Penyakit. Fungsi ini digunakan sebagai argumen terakhir pada fungsi selectionSort dan binarySearch.
+
+- `Pasien *a` : Pointer ke elemen a struct pasien
+- `Pasien *b` : Pointer ke elemen b struct pasien
+
+Fungsi ini melakukan compare dua string dengan strcmp() dan memberikan nilai return integer. jika return positif maka string pertama lebih besar daripada string kedua dan sebaliknya.
 
 ## `selectionSort`
 
@@ -39,7 +54,11 @@ Compares two patients based on the level of their diseases.
 void selectionSort(struct Pasien identitas[], int size, int (*compare)(const struct Pasien *, const struct Pasien *));
 ```
 
-Sorts an array of patients using the selection sort algorithm. The sorting criteria are defined by the comparison function provided.
+Implementasi sorting dengan metode selection sort
+
+- `identitas[]` : array of struct Pasien yang ingin disorting
+- `size` : ukuran array yang disorting
+- `*compare` : pointer ke fungsi compare berdasarkan apa (merujuk ke 3 fungsi diatas)
 
 ## `appendPeopleToFile`
 
@@ -47,15 +66,23 @@ Sorts an array of patients using the selection sort algorithm. The sorting crite
 void appendPeopleToFile(const char *filename, struct Pasien *people, int count);
 ```
 
-Appends an array of patients to a file, formatted with their name, age, gender, and disease level.
+Write array of struct ke file
 
-## `readPeopleToFile`
+- `*filename` : nama file yang akan di write
+- `*people` : pointer ke array struct Pasien yang ingin di write
+- `count` : berapa banyak anggota array yang ingin di write ke file
+
+## `readPeopleFromFile`
 
 ```c
 void readPeopleFromFile(const char *filename, struct Pasien *people, int count);
 ```
 
-Reads an array of patients from a file, assuming the file is formatted with name, age, gender, and disease level information.
+Read array of struct dari file (Parsing)
+
+- `*filename` : nama file yang akan di read
+- `*people` : pointer ke array struct Pasien yang ingin dimasukkan data dari file
+- `count` : berapa banyak anggota array dari file yang ingin di read
 
 ## `binarySearch`
 
@@ -63,7 +90,11 @@ Reads an array of patients from a file, assuming the file is formatted with name
 int binarySearch(const struct Pasien people[], int size, const char key[]);
 ```
 
-Performs a binary search for a patient in an array based on their name.
+Implementasi searching nama dengan metode binary search
+
+- `identitas[]` : array of struct Pasien yang ingin di search
+- `size` : ukuran array yang di search
+- `key[]` : kata yang dicari
 
 ## `hello`
 
@@ -71,4 +102,4 @@ Performs a binary search for a patient in an array based on their name.
 void hello();
 ```
 
-A simple function that prints "Hello World" to the console.
+Fungsi testing untuk memastikan functions.c dicompile dengan benar.
