@@ -42,11 +42,20 @@ int main(){
             }
             break;
         case 5:
-            printf("5");
+            char query[50];
+            printf("Masukkan nama dari pasien yang ingin dicari :");
+            scanf(" %[^\n]", query);
+            int result = binarySearch(people, numberOfLines, query);
+            if (result>=0){
+                printf("Data pasien ditemukan di index ke : %d\n", result);
+                printf("Dengan rincian data lengkap pasien :\n");
+                printf("Nama: %s, Umur: %s, Jenis Kelamin: %s, Tingkat Penyakit: %s\n", people[result].nama, people[result].umur, people[result].jenisKelamin, people[result].tingkatPenyakit);
+            } else {
+                printf("Data tidak ditemukan\n");
+            }
             break;
         default:
             break;
         }
     }
-    return 0;
-}
+    return 0;}
