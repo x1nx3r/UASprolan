@@ -10,10 +10,6 @@ int main(){
 
     initializePeople(people, 90);
     readPeopleFromFile(filename, people, numberOfLines);
-
-    for (int i = 0; i < numberOfLines; i++) {
-        printf("%s, %s, %s, %s\n", people[i].nama, people[i].umur, people[i].jenisKelamin, people[i].tingkatPenyakit);
-    }
     
     int choice;
     while(1==1){
