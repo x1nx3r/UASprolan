@@ -5,8 +5,8 @@
 struct Pasien {
     char nama[50];
     char umur[4];
-    char jenisKelamin[24];
-    char tingkatPenyakit[24];
+    char jenisKelamin[50];
+    char tingkatPenyakit[50];
 };
 
 // Fungsi untuk membandingkan dua pasien berdasarkan nama
@@ -68,7 +68,7 @@ void selectionSort(struct Pasien identitas[], int size, int (*compare)(const str
 }
 
 // Fungsi untuk menambahkan array pasien ke dalam file
-void appendPeopleToFile(const char *filename, struct Pasien *people, int count) {
+void appendPeopleToFile(const char *filename, struct Pasien *people, int start, int count) {
     FILE *filePointer = fopen(filename, "a");
 
     if (filePointer == NULL) {
@@ -76,8 +76,9 @@ void appendPeopleToFile(const char *filename, struct Pasien *people, int count) 
         return;
     }
 
-    for (int i = 0; i < count; i++) {
-        fprintf(filePointer, "Nama: %s, Umur: %s, Jenis Kelamin: %s, Tingkat Penyakit: %s\n", people[i].nama, people[i].umur, people[i].jenisKelamin, people[i].tingkatPenyakit);
+    for (int i = start; i < start + count; i++) {
+        fprintf(filePointer, "Nama: %s, Umur: %s, Jenis Kelamin: %s, Tingkat Penyakit: %s\n",
+                people[i].nama, people[i].umur, people[i].jenisKelamin, people[i].tingkatPenyakit);
     }
 
     fclose(filePointer);
@@ -145,6 +146,33 @@ int findEmptyElement(struct Pasien people[], int size) {
     }
 
     return -1;  // Return -1 if no empty element is found
+}
+
+// Function to add a new Pasien to the array
+void addPasien(struct Pasien people[], int size, int *count) {
+    int emptyIndex = findEmptyElement(people, size);
+
+    if (emptyIndex != -1) {
+        // Found an empty element, prompt user for input
+        printf("Masukkan nama: ");
+        scanf(" %[^\n]", people[emptyIndex].nama);
+
+        printf("Masukkan umur: ");
+        scanf(" %[^\n]", people[emptyIndex].umur);
+
+        printf("Masukkan jenis kelamin: ");
+        scanf(" %[^\n]", people[emptyIndex].jenisKelamin);
+
+        printf("Masukkan tingkat penyakit: ");
+        scanf(" %[^\n]", people[emptyIndex].tingkatPenyakit);
+
+        // Increment the count of elements
+        (*count)++;
+        printf("Data berhasil ditambahkan.\n");
+    } else {
+        // No empty element found
+        printf("Maaf, tidak dapat menambahkan data karena array sudah penuh.\n");
+    }
 }
 
 // Fungsi sederhana untuk mencetak "Hello World"
